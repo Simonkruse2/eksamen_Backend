@@ -1,24 +1,11 @@
 package rest;
 
-import com.google.gson.Gson;
-import dto.PersonDTO;
 import entities.Role;
 import entities.User;
-import facades.DataFromSwappi;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,19 +14,18 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import utils.EMF_Creator;
 
 /**
- * @author vincent
+ * @author Simon Kristopher Kruse Bentzen
  */
 @Path("info")
 public class DemoResource {
 
     private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
-    private static DataFromSwappi dfs = new DataFromSwappi();
+
 
 
     @Context
@@ -85,14 +71,6 @@ public class DemoResource {
     public String getFromAdmin() {
         String thisuser = securityContext.getUserPrincipal().getName();
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("user/people")
-    @RolesAllowed({"user", "admin"})
-    public List<PersonDTO> getFromUserPeople() throws MalformedURLException, IOException, InterruptedException, ExecutionException {
-        return dfs.getPeople();
     }
 
     @GET

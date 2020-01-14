@@ -7,7 +7,7 @@ package entities;
 
 /**
  *
- * @author simon
+ * @author Simon Kristopher Kruse Bentzen
  */
 public class ParserOfDates {
 
