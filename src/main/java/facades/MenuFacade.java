@@ -5,6 +5,7 @@
  */
 package facades;
 
+import dto.IngredientDTO;
 import dto.RecipeDTO;
 import entities.Ingredient;
 import entities.Item;
@@ -44,39 +45,113 @@ public class MenuFacade {
         return emf.createEntityManager();
     }
 
-    public List<RecipeDTO> getAllRecipes(){
+    public List<RecipeDTO> getAllRecipes() {
         EntityManager em = emf.createEntityManager();
         List<RecipeDTO> listDTO = new ArrayList();
-        try{
+        try {
             List<Recipe> list = em.createQuery("SELECT r FROM Recipe r").getResultList();
-            for(Recipe recipe : list) {
+            for (Recipe recipe : list) {
                 listDTO.add(new RecipeDTO(recipe));
             }
             return listDTO;
-        }finally{
+        } finally {
             em.close();
         }
-    }    
-    
-    public RecipeDTO getRecipe(int id){
+    }
+
+    public WeekPlan createWeekPlan(List<Recipe> recipe) {
         EntityManager em = emf.createEntityManager();
-        try{
+
+        WeekPlan weekplan = new WeekPlan();
+        for (Recipe recipe1 : recipe) {
+            weekplan.setRecipes(recipe1);
+        }
+        try {
+            em.getTransaction().begin();
+            em.persist(weekplan);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new WeekPlan();
+    }
+
+    public RecipeDTO createRecipe(RecipeDTO recipeDTO) {
+        EntityManager em = emf.createEntityManager();
+
+        Recipe recipe = new Recipe(recipeDTO.getName(), recipeDTO.getPreptime(), recipeDTO.getDirections());
+        for (IngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
+            Ingredient ingredient = new Ingredient(ingredientDTO.getAmount(), new Item(
+                    ingredientDTO.getItemDTO().getName(),
+                    ingredientDTO.getItemDTO().getPrice(),
+                    ingredientDTO.getItemDTO().getQty()));
+            recipe.setIngredients(ingredient);
+        }
+        try {
+            em.getTransaction().begin();
+            em.persist(recipe);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new RecipeDTO(recipe);
+    }
+
+    public RecipeDTO editRecipe(RecipeDTO recipeDTO, int id) {
+        EntityManager em = emf.createEntityManager();
+        Recipe recipe = em.find(Recipe.class, id);
+        recipe.setName(recipeDTO.getName());
+        recipe.setPreptime(recipeDTO.getPreptime());
+        recipe.setDirections(recipeDTO.getDirections());
+        for (IngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
+
+            for (int i = 0; i < recipe.getIngredients().size() - 1; i++) {
+                Ingredient ingredient = em.find(Ingredient.class, recipe.getIngredients().get(i).getId());
+                if (!(ingredient.equals(recipe.getIngredients().get(i)))) {
+                    ingredient = new Ingredient(ingredientDTO.getAmount(), new Item(
+                            ingredientDTO.getItemDTO().getName(),
+                            ingredientDTO.getItemDTO().getPrice(),
+                            ingredientDTO.getItemDTO().getQty()));
+                    recipe.setIngredients(ingredient);
+                } else {
+                    try {
+                        em.getTransaction().begin();
+                        em.merge(recipe);
+                        em.getTransaction().commit();
+                    } finally {
+                        em.close();
+                    }
+                }
+            }
+        }
+        return new RecipeDTO(recipe);
+    }
+
+    public RecipeDTO getRecipe(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
             Recipe recipe = em.find(Recipe.class, id);
             return new RecipeDTO(recipe);
-        }finally{
+        } finally {
             em.close();
         }
-    }    
-//
-//    public void 
-//    
+    }
+
     public void setup() {
         EntityManager em = emf.createEntityManager();
-        Item item = new Item("Spaghetti", 200);
-        item.equals(15);
-        Ingredient ingredient = new Ingredient(20);
-        Recipe recipe = new Recipe(50, "First you fill the bowl");
+        Item item = new Item("Spaghetti", 7.5);
+        Item item1 = new Item("Tomatoes", 13);
+        Item item2 = new Item("Meatballs", 53);
+        Ingredient ingredient = new Ingredient(300);
+        Ingredient ingredient1 = new Ingredient(250);
+        Ingredient ingredient2 = new Ingredient(500);
+        ingredient.setItem(item);
+        ingredient1.setItem(item1);
+        ingredient2.setItem(item2);
+        Recipe recipe = new Recipe("Spaggoot", 50, "First you fill the bowl");
         recipe.setIngredients(ingredient);
+        recipe.setIngredients(ingredient1);
+        recipe.setIngredients(ingredient2);
         LocalDate date = LocalDate.now();
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = date.get(woy);

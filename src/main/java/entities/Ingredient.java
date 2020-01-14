@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,8 +26,11 @@ public class Ingredient implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int amount;
+    
     @ManyToOne
     private Recipe recipe;
+    
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Item item;
 
     public Ingredient() {

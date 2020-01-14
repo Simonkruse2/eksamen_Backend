@@ -6,13 +6,14 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -29,6 +30,9 @@ public class Item implements Serializable {
     private String name;
     private double price;
     private int qty;
+
+    @OneToMany(mappedBy = "item")
+    private List<Ingredient> ingredient = new ArrayList<>();
 
     public Item() {
     }
@@ -74,6 +78,14 @@ public class Item implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<Ingredient> getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(List<Ingredient> ingredient) {
+        this.ingredient = ingredient;
     }
 
     @Override

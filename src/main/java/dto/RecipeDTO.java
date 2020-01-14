@@ -7,7 +7,6 @@ package dto;
 
 import entities.Ingredient;
 import entities.Recipe;
-import entities.WeekPlan;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,8 +17,9 @@ import java.util.Objects;
  */
 public class RecipeDTO {
 
-    private Integer id;
+    private String name;
     private int preptime;
+    private Integer id;
     private String directions;
     private List<IngredientDTO> ingredients = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class RecipeDTO {
     }
 
     public RecipeDTO(Recipe recipe) {
-
+        this.name = recipe.getName();
         this.id = recipe.getId();
         this.preptime = recipe.getPreptime();
         this.directions = recipe.getDirections();
@@ -42,6 +42,14 @@ public class RecipeDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getPreptime() {
@@ -70,11 +78,12 @@ public class RecipeDTO {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.id);
-        hash = 23 * hash + this.preptime;
-        hash = 23 * hash + Objects.hashCode(this.directions);
-        hash = 23 * hash + Objects.hashCode(this.ingredients);
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + this.preptime;
+        hash = 97 * hash + Objects.hashCode(this.directions);
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.ingredients);
         return hash;
     }
 
@@ -96,6 +105,9 @@ public class RecipeDTO {
         if (!Objects.equals(this.directions, other.directions)) {
             return false;
         }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -107,7 +119,6 @@ public class RecipeDTO {
 
     @Override
     public String toString() {
-        return "RecipeDTO{" + "id=" + id + ", preptime=" + preptime + ", directions=" + directions + ", ingredients=" + ingredients + '}';
+        return "RecipeDTO{" + "name=" + name + ", preptime=" + preptime + ", id=" + id + ", directions=" + directions + ", ingredients=" + ingredients + '}';
     }
-
 }

@@ -19,6 +19,9 @@ public class ItemDTO {
     private double price;
     private int qty;
 
+    public ItemDTO() {
+    }
+
     public ItemDTO(Item item) {
         this.id = item.getId();
         this.name = item.getName();

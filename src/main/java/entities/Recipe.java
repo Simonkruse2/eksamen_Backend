@@ -28,6 +28,7 @@ public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     private int preptime;
     private String directions;
 
@@ -40,7 +41,8 @@ public class Recipe implements Serializable {
     public Recipe() {
     }
 
-    public Recipe(int preptime, String directions) {
+    public Recipe(String name, int preptime, String directions) {
+        this.name = name;
         this.preptime = preptime;
         this.directions = directions;
     }
@@ -67,6 +69,15 @@ public class Recipe implements Serializable {
 
     public void setIngredients(Ingredient ingredient) {
         ingredients.add(ingredient);
+        ingredient.setRecipe(this);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -88,11 +99,12 @@ public class Recipe implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + this.preptime;
-        hash = 79 * hash + Objects.hashCode(this.directions);
-        hash = 79 * hash + Objects.hashCode(this.weekPlans);
-        hash = 79 * hash + Objects.hashCode(this.ingredients);
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + this.preptime;
+        hash = 29 * hash + Objects.hashCode(this.directions);
+        hash = 29 * hash + Objects.hashCode(this.weekPlans);
+        hash = 29 * hash + Objects.hashCode(this.ingredients);
         return hash;
     }
 
@@ -109,6 +121,9 @@ public class Recipe implements Serializable {
         }
         final Recipe other = (Recipe) obj;
         if (this.preptime != other.preptime) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         if (!Objects.equals(this.directions, other.directions)) {
@@ -128,7 +143,7 @@ public class Recipe implements Serializable {
 
     @Override
     public String toString() {
-        return "Recipe{" + "id=" + id + ", preptime=" + preptime + ", directions=" + directions + ", weekPlans=" + weekPlans + ", ingredients=" + ingredients + '}';
+        return "Recipe{" + "id=" + id + ", name=" + name + ", preptime=" + preptime + ", directions=" + directions + ", weekPlans=" + weekPlans + ", ingredients=" + ingredients + '}';
     }
 
 }
