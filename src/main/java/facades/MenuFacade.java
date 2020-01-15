@@ -12,6 +12,7 @@ import entities.Ingredient;
 import entities.Item;
 import entities.Recipe;
 import entities.WeekPlan;
+import errorhandling.NotFoundException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -60,7 +61,7 @@ public class MenuFacade {
         }
     }
 
-     public WeekPlanDTO getWeekPlanDTO(int id) {
+    public WeekPlanDTO getWeekPlanDTO(int id) {
         EntityManager em = emf.createEntityManager();
         try {
             WeekPlan weekPlan = em.find(WeekPlan.class, id);
@@ -69,25 +70,27 @@ public class MenuFacade {
             em.close();
         }
     }
-    
-    public List<WeekPlanDTO> getAllWeekPlans(){
+
+    public List<WeekPlanDTO> getAllWeekPlans() {
         EntityManager em = emf.createEntityManager();
         List<WeekPlanDTO> weekPlanDTO = new ArrayList<>();
-        try{
+        try {
             List<WeekPlan> list = em.createQuery("SELECT w FROM WeekPlan w").getResultList();
             for (WeekPlan weekPlan : list) {
                 weekPlanDTO.add(new WeekPlanDTO(weekPlan));
             }
             return weekPlanDTO;
-        }finally{
+        } finally {
             em.close();
         }
     }
-    
+
     public WeekPlan createWeekPlan(List<Recipe> recipe) {
         EntityManager em = emf.createEntityManager();
-
-        WeekPlan weekplan = new WeekPlan();
+        LocalDate date = LocalDate.now();
+        TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+        int weekNumber = date.get(woy);
+        WeekPlan weekplan = new WeekPlan((weekNumber + 1), date.getYear());
         for (Recipe recipe1 : recipe) {
             weekplan.setRecipes(recipe1);
         }
@@ -160,6 +163,21 @@ public class MenuFacade {
         } finally {
             em.close();
         }
+    }
+
+    public String deleteWeekPlan(int id) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+        WeekPlan weekplan = em.find(WeekPlan.class, id);
+
+        if (weekplan == null) {
+            throw new NotFoundException("Unfortunately that weekplan doesn't exist, it may already have been deleted.");
+        }
+
+        em.getTransaction().begin();
+        em.remove(weekplan);
+        em.getTransaction().commit();
+
+        return "success";
     }
 
     public void setup() {

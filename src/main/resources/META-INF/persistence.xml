@@ -7,7 +7,6 @@
     <class>entities.User</class>
     <class>entities.WeekPlan</class>
     <class>entities.Recipe</class>
-    <class>entities.DayPlan</class>
     <class>entities.Ingredient</class>
     <class>entities.Item</class>
     <class>entities.Storage</class>
