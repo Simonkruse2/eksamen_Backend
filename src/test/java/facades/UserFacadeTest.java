@@ -18,7 +18,7 @@ import utils.EMF_Creator;
  *
  * @author Simon Kristopher Kruse Bentzen
  */
-//@Disabled
+@Disabled
 public class UserFacadeTest {
 
     private static User user2 = new User("user", "test");
