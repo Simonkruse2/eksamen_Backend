@@ -7,6 +7,7 @@ package facades;
 
 import dto.IngredientDTO;
 import dto.RecipeDTO;
+import dto.WeekPlanDTO;
 import entities.Ingredient;
 import entities.Item;
 import entities.Recipe;
@@ -59,6 +60,30 @@ public class MenuFacade {
         }
     }
 
+     public WeekPlanDTO getWeekPlanDTO(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            WeekPlan weekPlan = em.find(WeekPlan.class, id);
+            return new WeekPlanDTO(weekPlan);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public List<WeekPlanDTO> getAllWeekPlans(){
+        EntityManager em = emf.createEntityManager();
+        List<WeekPlanDTO> weekPlanDTO = new ArrayList<>();
+        try{
+            List<WeekPlan> list = em.createQuery("SELECT w FROM WeekPlan w").getResultList();
+            for (WeekPlan weekPlan : list) {
+                weekPlanDTO.add(new WeekPlanDTO(weekPlan));
+            }
+            return weekPlanDTO;
+        }finally{
+            em.close();
+        }
+    }
+    
     public WeekPlan createWeekPlan(List<Recipe> recipe) {
         EntityManager em = emf.createEntityManager();
 

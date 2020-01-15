@@ -3,6 +3,9 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.RecipeDTO;
+import dto.WeekPlanDTO;
+import entities.Recipe;
+import entities.WeekPlan;
 import utils.EMF_Creator;
 import facades.FacadeExample;
 import facades.MenuFacade;
@@ -45,8 +48,6 @@ public class FoodResource {
         long count = FACADE1.getRenameMeCount();
         return "{\"count\":" + count + "}";  //Done manually so no need for a DTO
     }
-//HUSK AT TILFØJE ROLES ALLOWED = ADMIN
-
     @RolesAllowed("admin")
     @Path("createRecipe")
     @POST
@@ -55,7 +56,7 @@ public class FoodResource {
     public RecipeDTO createRecipe(RecipeDTO recipeDTO) {
         return FACADE.createRecipe(recipeDTO);
     }
-    
+
     @RolesAllowed("admin")
     @Path("editRecipe/{id}")
     @PUT
@@ -72,16 +73,16 @@ public class FoodResource {
         FACADE.setup();
         return "setup complete";
     }
-    
-    @RolesAllowed({"admin","user"})
+
+    @RolesAllowed({"admin", "user"})
     @GET
     @Path("all")
     @Produces({MediaType.APPLICATION_JSON})
     public List<RecipeDTO> all() {
         return FACADE.getAllRecipes();
     }
-    
-    @RolesAllowed({"admin","user"})
+
+    @RolesAllowed({"admin", "user"})
     @GET
     @Path("find/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -89,4 +90,28 @@ public class FoodResource {
         return FACADE.getRecipe(id);
     }
 
+    @RolesAllowed({"admin", "user"})
+    @GET
+    @Path("weekPlanFind/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public WeekPlanDTO findWeekPlan(@PathParam("id") int id) {
+        return FACADE.getWeekPlanDTO(id);
+    }
+
+    @RolesAllowed({"admin", "user"})
+    @GET
+    @Path("allWeekPlans")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<WeekPlanDTO> findWeekPlan() {
+        return FACADE.getAllWeekPlans();
+    }
+    
+    @RolesAllowed({"admin","user"})
+    @Path("createWeekPlan")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON})
+    public WeekPlan createWeekPlan(List<Recipe> recipe) {
+        return FACADE.createWeekPlan(recipe);
+    }
 }
