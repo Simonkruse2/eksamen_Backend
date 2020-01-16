@@ -191,16 +191,52 @@ public class MenuFacade {
         ingredient.setItem(item);
         ingredient1.setItem(item1);
         ingredient2.setItem(item2);
-        Recipe recipe = new Recipe("Spaggoot", 50, "First you fill the bowl");
+        Recipe recipe = new Recipe("Spaghetti and meatballs", 50, "First you fill a pot with water, "
+                + "bring it to a simmer and then add your pasta to it. Take your tomatoes and add them to a pot, heat and reduce it."
+                + " Bring out a large skillet and add your meatballs and cook them until golden brown. Serve immediately");
         recipe.setIngredients(ingredient);
         recipe.setIngredients(ingredient1);
         recipe.setIngredients(ingredient2);
+        Item item3 = new Item("Spaghetti", 7.5);
+        Item item4 = new Item("Garlic", 20);
+        Item item5 = new Item("Parsley", 15);
+        Ingredient ingredient3 = new Ingredient(750);
+        Ingredient ingredient4 = new Ingredient(240);
+        Ingredient ingredient5 = new Ingredient(350);
+        ingredient3.setItem(item3);
+        ingredient4.setItem(item4);
+        ingredient5.setItem(item5);
+        Recipe recipe1 = new Recipe("Pasta olio e aglio", 10, "First you fill a pot with water, "
+                + "bring it to a simmer and then add your pasta to it. Take your garlic, mince it finely");
+//                + " and add to a skillet with a good amount of olive oil. Keep going until the garlic has taken on some colour."
+//                + " Bring out a large skillet and add your pasta, garlic and parsley. If the sauce is too thin, add some pasta water. Serve immediately");
+        recipe1.setIngredients(ingredient3);
+        recipe1.setIngredients(ingredient4);
+        recipe1.setIngredients(ingredient5);
+        Item item6 = new Item("Egg", 5);
+        Item item7 = new Item("Bacon", 12);
+        Item item8 = new Item("Toast", 10);
+        Ingredient ingredient6 = new Ingredient(350);
+        Ingredient ingredient7 = new Ingredient(275);
+        Ingredient ingredient8 = new Ingredient(675);
+        ingredient6.setItem(item6);
+        ingredient7.setItem(item7);
+        ingredient8.setItem(item8);
+        Recipe recipe2 = new Recipe("Fried bacon and eggs with a side of toast", 20, "Take out a pan. Add some butter to the pan and toast your toast to your liking and then set aside. "
+                + " Cook your bacon on one side of the pan. If you want to achieve an even fry, add a bit of oil to the pan, make room for the eggs.");
+//                + " If you're not experienced with cracking eggs, you can crack them in a seperate container before you add them to the pan, to avoid any eggs shells making their way to the pan."
+//                + " add your eggs to the pan and cook them to your liking. The same trick with oil can be done here, it'll crisp up the egg. Serve immediately");
+        recipe2.setIngredients(ingredient6);
+        recipe2.setIngredients(ingredient7);
+        recipe2.setIngredients(ingredient8);
         LocalDate date = LocalDate.now();
         TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
         int weekNumber = date.get(woy);
-        try {
             WeekPlan plan = new WeekPlan((weekNumber + 1), date.getYear());
             plan.setRecipes(recipe);
+            plan.setRecipes(recipe1);
+            plan.setRecipes(recipe2);
+        try {
             em.getTransaction().begin();
             em.persist(plan);
             em.getTransaction().commit();

@@ -26,8 +26,6 @@ public class DemoResource {
 
     private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
 
-
-
     @Context
     private UriInfo context;
 

@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public class SetupTestUsers {
-
     public void fill() {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
         EntityManager em = emf.createEntityManager();
@@ -17,9 +16,9 @@ public class SetupTestUsers {
         // CHANGE the three passwords below, before you uncomment and execute the code below
         // Also, either delete this file, when users are created or rename and add to .gitignore
         // Whatever you do DO NOT COMMIT and PUSH with the real passwords
-        User user = new User("user", "test12");
-        User admin = new User("admin", "test12");
-        User both = new User("user_admin", "test12");
+        User user = new User("user", "test1");
+        User admin = new User("admin", "test1");
+        User both = new User("user_admin", "test1");
 
         if (admin.getUserPass().equals("test") || user.getUserPass().equals("test") || both.getUserPass().equals("test")) {
             throw new UnsupportedOperationException("You have not changed the passwords");
@@ -39,7 +38,7 @@ public class SetupTestUsers {
         em.persist(both);
         em.getTransaction().commit();
         System.out.println("PW: " + "PASSWORD REDACTED");
-        System.out.println("Testing user with OK password: " + user.verifyPassword("test12"));
+        System.out.println("Testing user with OK password: " + user.verifyPassword("test1"));
         System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
         System.out.println("Created TEST Users");
     }
